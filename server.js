@@ -3,12 +3,22 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'https://hdohnert-helio.github.io',
+    'http://localhost',
+    'http://127.0.0.1',
+  ],
+  methods: ['GET', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'x-app-password'],
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 const GH_TOKEN = process.env.GH_TOKEN;
 const GH_REPO  = process.env.GH_REPO;
-const APP_PASS  = process.env.APP_PASS;
+const APP_PASS = process.env.APP_PASS;
 
 if (!GH_TOKEN || !GH_REPO || !APP_PASS) {
   console.error('Missing required environment variables: GH_TOKEN, GH_REPO, APP_PASS');
